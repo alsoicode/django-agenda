@@ -14,6 +14,8 @@ from django.contrib.sites.managers import CurrentSiteManager
 
 from django.contrib.sitemaps import ping_google
 
+from cms.models import CMSPlugin
+
 class Location(models.Model):
     class Meta:
         verbose_name = _('location')
@@ -105,3 +107,9 @@ class Calendar(models.Model):
         if self.name:
             return self.name
         return _("Unnamed Calendar")
+    
+
+class AgendaPlugin(CMSPlugin):
+    caption = models.CharField(null=True, blank=True, max_length=255)
+    calendar = models.ForeignKey(Calendar)
+    
