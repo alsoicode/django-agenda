@@ -1,19 +1,20 @@
+from django.utils.translation import ugettext as _
+
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from models import AgendaPlugin
-from django.utils.translation import ugettext as _
-import agenda
+from agenda.models import AgendaPlugin
+
 
 class CMSCalendarPlugin(CMSPluginBase):
-    model =  AgendaPlugin
-    name = _("Agenda Cal")
+    model = AgendaPlugin
+    name = _('Calendar')
     render_template = "calendar/calendar.html"
 
     def render(self, context, instance, placeholder):
         context.update({
-            'calendar':instance.calendar,
-            'object':instance,
-            'placeholder':placeholder
+            'calendar' : instance.calendar,
+            'object' : instance,
+            'placeholder' : placeholder
         })
         return context
 
