@@ -1,41 +1,42 @@
-from django import template
+import datetime
+import logging
+import re
 
 from calendar import Calendar
-import datetime
+from django import template
 
-import re
 
 register = template.Library()
 
-import logging 
 
-@register.tag(name="get_calendar")
+@register.tag(name='get_calendar')
 def do_calendar(parser, token):
-    syntax_help = "syntax should be \"get_calendar for <month> <year> as <var_name>\""
+    syntax_help = 'Syntax should be "get_calendar for <month> <year> as <var_name>"'
     # This version uses a regular expression to parse tag contents.
     try:
         # Splitting by None == splitting by spaces.
         tag_name, arg = token.contents.split(None, 1)
     except ValueError:
-        raise template.TemplateSyntaxError, "%r tag requires arguments, %s" % (token.contents.split()[0], syntax_help)
+        raise template.TemplateSyntaxError, '%r tag requires arguments, %s' % (token.contents.split()[0], syntax_help)
     m = re.search(r'for (.*?) (.*?) as (\w+)', arg)
     if not m:
-        raise template.TemplateSyntaxError, "%r tag had invalid arguments, %s" % (tag_name, syntax_help)
-    
+        raise template.TemplateSyntaxError, '%r tag had invalid arguments, %s' % (tag_name, syntax_help)
+
     return GetCalendarNode(*m.groups())
+
 
 class GetCalendarNode(template.Node):
     def __init__(self, month, year, var_name):
         self.year = template.Variable(year)
         self.month = template.Variable(month)
         self.var_name = var_name
-        
+
     def render(self, context):
         mycal = Calendar()
         context[self.var_name] = mycal.monthdatescalendar(int(self.year.resolve(context)), int(self.month.resolve(context)))
-        
+
         return ''
-        
+
 class IfInNode(template.Node):
     '''
     Like {% if %} but checks for the first value being in the second value (if a list). Does not work if the second value is not a list.
@@ -46,7 +47,7 @@ class IfInNode(template.Node):
         self.negate = negate
 
     def __str__(self):
-        return "<IfNode>"
+        return '<IfNode>'
 
     def render(self, context):
         val1 = template.resolve_variable(self.var1, context)
@@ -62,7 +63,7 @@ class IfInNode(template.Node):
 def ifin(parser, token, negate):
     bits = token.contents.split()
     if len(bits) != 3:
-        raise template.TemplateSyntaxError, "%r takes two arguments" % bits[0]
+        raise template.TemplateSyntaxError, '%r takes two arguments' % bits[0]
     end_tag = 'end' + bits[0]
     nodelist_true = parser.parse(('else', end_tag))
     token = parser.next_token()
