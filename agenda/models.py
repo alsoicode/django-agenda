@@ -14,8 +14,8 @@ from cms.models import CMSPlugin
 
 class Location(models.Model):
     class Meta:
-        verbose_name = _('location')
-        verbose_name_plural = _('locations')
+        verbose_name = _('Location')
+        verbose_name_plural = _('Locations')
         ordering = ('title',)
 
     def __unicode__(self):
@@ -36,12 +36,12 @@ class PublicationManager(CurrentSiteManager):
 
 class Event(models.Model):
     class Meta:
-        verbose_name = _('event')
-        verbose_name_plural = _('events')
+        verbose_name = _('Event')
+        verbose_name_plural = _('Events')
         ordering = ['-event_date', '-start_time', '-title']
         get_latest_by = 'event_date'
-        permissions = (("change_author", ugettext("Change author")),)
-        unique_together = ("event_date", "slug")
+        permissions = (('change_author', ugettext('Change author')),)
+        unique_together = ('event_date', 'slug')
 
     def __unicode__(self):
         return _("%(title)s on %(event_date)s") % { 'title' : self.title, 'event_date' : self.event_date }
@@ -59,22 +59,22 @@ class Event(models.Model):
     published = PublicationManager()
 
     # Core fields
-    title = models.CharField(_('title'), max_length=255)
-    slug = models.SlugField(_('slug'), db_index=True)
-    event_date = models.DateField(_('date'))
-    start_time = models.TimeField(_('start time'), blank=True, null=True)
-    end_time = models.TimeField(_('end time'), blank=True, null=True)
+    title = models.CharField(_('Title'), max_length=255)
+    slug = models.SlugField(_('Slug'), db_index=True)
+    event_date = models.DateField(_('Date'))
+    start_time = models.TimeField(_('Start Time'), blank=True, null=True)
+    end_time = models.TimeField(_('End Time'), blank=True, null=True)
     location = models.ForeignKey(Location, blank=True, null=True)
-    description = models.TextField(_('description'))
+    description = models.TextField(_('Description'))
     calendar = models.ForeignKey('Calendar', blank=True, null=True, related_name='events')
 
     # Extra fields
     add_date = models.DateTimeField(_('add date'), auto_now_add=True)
     mod_date = models.DateTimeField(_('modification date'), auto_now=True)
-    author = models.ForeignKey(User, verbose_name=_('author'), db_index=True, blank=True, null=True)
-    publish_date = models.DateTimeField(_('publication date'), default=datetime.now())
-    publish = models.BooleanField(_('publish'), default=True)
-    allow_comments = models.BooleanField(_('Allow comments'), default=True)
+    author = models.ForeignKey(User, verbose_name=_('Author'), db_index=True, blank=True, null=True)
+    publish_date = models.DateTimeField(_('Publication Date'), default=datetime.now())
+    publish = models.BooleanField(_('Publish'), default=False)
+    allow_comments = models.BooleanField(_('Allow comments'), default=False)
     sites = models.ManyToManyField(Site)
 
     def save(self):
@@ -88,11 +88,11 @@ class Event(models.Model):
 
 
 class Calendar(models.Model):
-    name = models.CharField(_('name'), max_length=100, blank=True, null=True)
+    name = models.CharField(_('Name'), max_length=100, blank=True, null=True)
 
     class Meta:
-        verbose_name = _('calendar')
-        verbose_name_plural = _('calendars')
+        verbose_name = _('Calendar')
+        verbose_name_plural = _('Calendars')
 
     def __unicode__(self):
         if self.name:
