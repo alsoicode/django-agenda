@@ -76,6 +76,8 @@ class Event(models.Model):
     publish = models.BooleanField(_('Publish'), default=False)
     allow_comments = models.BooleanField(_('Allow comments'), default=False)
     sites = models.ManyToManyField(Site)
+    website = models.URLField(verify_exists=True, blank=True)
+    phone = models.CharField(max_length=20, blank=True)
 
     def save(self):
         super(Event, self).save()
