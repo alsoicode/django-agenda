@@ -21,11 +21,13 @@ class Location(models.Model):
     def __unicode__(self):
         return self.title
 
-    title = models.CharField(_('title'), max_length=255)
-    slug = models.SlugField(_('slug'), db_index=True)
-
-    address = models.CharField(_('address'), max_length=255, blank=True)
-
+    title = models.CharField(_('Title'), max_length=255)
+    slug = models.SlugField(_('Slug'), db_index=True)
+    address = models.CharField(_('Address'), max_length=255, blank=True)
+    address2 = models.CharField(_('Address (cont)'), max_length=255, blank=True)
+    city = models.CharField(_('City'), blank=True)
+    state_province = models.CharField(_('State / Province'), max_length=255, blank=True)
+    postal_code = models.CharField(_('Postal Code'), max_length=20, blank=True)
 
 class PublicationManager(CurrentSiteManager):
     def get_query_set(self):
